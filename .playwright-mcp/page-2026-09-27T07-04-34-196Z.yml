@@ -1,0 +1,53 @@
+- generic [active] [ref=f9e1]:
+  - banner [ref=f9e2]:
+    - generic [ref=f9e3]:
+      - link "VC 바이브 코딩 컨설팅" [ref=f9e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f9e5]: VC
+        - generic [ref=f9e6]: 바이브 코딩 컨설팅
+      - navigation "주요 메뉴" [ref=f9e7]:
+        - link "홈" [ref=f9e8] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f9e9] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f9e10] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=f9e11]:
+    - generic [ref=f9e12]:
+      - generic [ref=f9e13]:
+        - img "바이브 코딩 컨설팅" [ref=f9e15]
+        - button "이전 슬라이드" [ref=f9e20]
+        - button "다음 슬라이드" [ref=f9e23]
+        - generic [ref=f9e26]:
+          - button "1번 슬라이드로 이동" [ref=f9e27]
+          - button "2번 슬라이드로 이동" [ref=f9e29]
+          - button "3번 슬라이드로 이동" [ref=f9e31]
+      - generic [ref=f9e33]:
+        - heading "바이브 코딩 컨설팅" [level=1] [ref=f9e34]
+        - paragraph [ref=f9e35]: 코드에 생명을 불어넣는 컨설팅 파트너
+        - paragraph [ref=f9e36]: 바이브 코딩은 단순히 코드를 작성하는 것을 넘어, 비즈니스의 본질을 이해하고 기술적 가치를 창출하는 컨설팅 서비스입니다. 귀사의 성장과 혁신을 위한 최적의 솔루션을 함께 만들어갑니다.
+        - link "컨설팅 문의하기" [ref=f9e37] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=f9e39]:
+        - generic [ref=f9e40]:
+          - heading "빠른 프로토타이핑" [level=2] [ref=f9e41]
+          - paragraph [ref=f9e42]: 아이디어를 며칠 안에 실제로 동작하는 제품으로 만들어 드립니다.
+        - generic [ref=f9e43]:
+          - heading "실전 코칭" [level=2] [ref=f9e44]
+          - paragraph [ref=f9e45]: 팀의 개발자와 함께 문제를 진단하고, 현장에서 바로 쓰는 방법을 전달합니다.
+        - generic [ref=f9e46]:
+          - heading "지속 가능한 코드베이스" [level=2] [ref=f9e47]
+          - paragraph [ref=f9e48]: 컨설팅이 끝난 뒤에도 팀이 스스로 유지보수할 수 있는 구조로 설계합니다.
+  - contentinfo [ref=f9e49]:
+    - generic [ref=f9e50]:
+      - generic [ref=f9e51]:
+        - generic [ref=f9e52]: VC
+        - paragraph [ref=f9e53]: © 2026 바이브 코딩 컨설팅. All rights reserved.
+      - navigation "푸터 메뉴" [ref=f9e54]:
+        - link "홈" [ref=f9e55] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f9e56] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f9e57] [cursor=pointer]:
+          - /url: /contact
+  - button "Open Next.js Dev Tools" [ref=f9e63] [cursor=pointer]

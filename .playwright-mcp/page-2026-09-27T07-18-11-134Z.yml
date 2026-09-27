@@ -1,0 +1,130 @@
+- generic [ref=f4e4]:
+  - navigation [ref=f4e5]:
+    - generic [ref=f4e6]:
+      - generic [ref=f4e7]:
+        - link "Unsplash 홈" [ref=f4e8] [cursor=pointer]:
+          - /url: /ko
+          - img "Unsplash 홈" [ref=f4e9]
+        - link "사진" [ref=f4e11] [cursor=pointer]:
+          - /url: /ko
+        - link "일러스트" [ref=f4e14] [cursor=pointer]:
+          - /url: /ko/%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8
+      - generic [ref=f4e17]:
+        - button "탐색" [ref=f4e18] [cursor=pointer]
+        - button "컬렉션" [ref=f4e21] [cursor=pointer]
+        - button "다운로드 내역" [ref=f4e24] [cursor=pointer]
+      - button "북마크" [ref=f4e28] [cursor=pointer]
+    - generic [ref=f4e31]:
+      - link "로그인 / 가입" [ref=f4e32] [cursor=pointer]:
+        - /url: /ko/%EB%A1%9C%EA%B7%B8%EC%9D%B8?referrer=%2Fko%2F%25EC%2582%25AC%25EC%25A7%2584%2F%25ED%2598%2584%25EB%258C%2580%25EC%25A0%2581%25EC%259D%25B8-%25EC%2582%25AC%25EB%25AC%25B4%25EC%258B%25A4%25EC%2597%2590%25EC%2584%259C-%25ED%2599%2594%25EC%259D%25B4%25ED%258A%25B8%25EB%25B3%25B4%25EB%2593%259C%25EB%25A5%25BC-%25EC%25A4%2591%25EC%258B%25AC%25EC%259C%25BC%25EB%25A1%259C-%25ED%2598%2591%25EC%2597%2585%25ED%2595%2598%25EB%258A%2594-%25ED%258C%2580-K0aM-ztA76Q
+      - button "언어" [ref=f4e35] [cursor=pointer]
+      - button "메뉴" [ref=f4e38] [cursor=pointer]
+  - generic [ref=f4e41]:
+    - generic [ref=f4e42]:
+      - navigation [ref=f4e43]:
+        - search "사이트 전체에서 이미지 찾기" [ref=f4e45]:
+          - button "Unsplash 검색" [ref=f4e46] [cursor=pointer]
+          - combobox [ref=f4e49]:
+            - searchbox "Unsplash 검색" [ref=f4e50]
+            - listbox
+          - button "시각적 검색" [ref=f4e52] [cursor=pointer]
+        - generic [ref=f4e55]:
+          - link "Unsplash+ 구독" [ref=f4e56] [cursor=pointer]:
+            - /url: /ko/%ED%94%8C%EB%9F%AC%EC%8A%A4
+          - link "로그인" [ref=f4e57] [cursor=pointer]:
+            - /url: /ko/%EB%A1%9C%EA%B7%B8%EC%9D%B8?referrer=%2Fko%2F%25EC%2582%25AC%25EC%25A7%2584%2F%25ED%2598%2584%25EB%258C%2580%25EC%25A0%2581%25EC%259D%25B8-%25EC%2582%25AC%25EB%25AC%25B4%25EC%258B%25A4%25EC%2597%2590%25EC%2584%259C-%25ED%2599%2594%25EC%259D%25B4%25ED%258A%25B8%25EB%25B3%25B4%25EB%2593%259C%25EB%25A5%25BC-%25EC%25A4%2591%25EC%258B%25AC%25EC%259C%25BC%25EB%25A1%259C-%25ED%2598%2591%25EC%2597%2585%25ED%2595%2598%25EB%258A%2594-%25ED%258C%2580-K0aM-ztA76Q
+        - button "이미지 제출" [ref=f4e59] [cursor=pointer]
+      - generic [ref=f4e60]:
+        - generic [ref=f4e61]:
+          - banner [ref=f4e63]:
+            - generic [ref=f4e65]:
+              - link [ref=f4e66] [cursor=pointer]:
+                - /url: /ko/@silverkblack
+              - generic [ref=f4e69]:
+                - link "Vitaly Gariev" [ref=f4e70] [cursor=pointer]:
+                  - /url: /ko/@silverkblack
+                - link "고용 가능" [ref=f4e72] [cursor=pointer]:
+                  - /url: /ko/@silverkblack
+            - generic [ref=f4e75]:
+              - button "북마크" [ref=f4e76] [cursor=pointer]
+              - button "컬렉션에 추가" [ref=f4e79] [cursor=pointer]
+              - link "이미지 편집" [ref=f4e82] [cursor=pointer]:
+                - /url: /ko/%ED%94%8C%EB%9F%AC%EC%8A%A4?referrer=%2Fko%2F%25EC%2582%25AC%25EC%25A7%2584%2F%25ED%2598%2584%25EB%258C%2580%25EC%25A0%2581%25EC%259D%25B8-%25EC%2582%25AC%25EB%25AC%25B4%25EC%258B%25A4%25EC%2597%2590%25EC%2584%259C-%25ED%2599%2594%25EC%259D%25B4%25ED%258A%25B8%25EB%25B3%25B4%25EB%2593%259C%25EB%25A5%25BC-%25EC%25A4%2591%25EC%258B%25AC%25EC%259C%25BC%25EB%25A1%259C-%25ED%2598%2591%25EC%2597%2585%25ED%2595%2598%25EB%258A%2594-%25ED%258C%2580-K0aM-ztA76Q
+              - generic [ref=f4e86]:
+                - link "무료 다운로드" [ref=f4e87] [cursor=pointer]:
+                  - /url: https://unsplash.com/photos/K0aM-ztA76Q/download?force=true
+                - button "다운로드 크기 선택" [ref=f4e89] [cursor=pointer]
+          - button "이 이미지 확대" [disabled] [ref=f4e95]:
+            - img "현대적인 사무실에서 화이트보드를 중심으로 협업하는 팀" [ref=f4e96]
+          - generic [ref=f4e97]:
+            - generic [ref=f4e98]:
+              - generic [ref=f4e99]:
+                - generic [ref=f4e100]:
+                  - generic [ref=f4e101]: ––– –– ––
+                  - text: ––– –––– ––––
+                - generic [ref=f4e102]:
+                  - generic [ref=f4e103]: ––– –– ––
+                  - text: ––– –––– ––––
+              - generic [ref=f4e104]:
+                - button "이 이미지 공유" [ref=f4e105] [cursor=pointer]:
+                  - generic [ref=f4e108]: 공유
+                - button "이 이미지 관련 통계" [ref=f4e109] [cursor=pointer]:
+                  - generic [ref=f4e112]: 정보
+                - button "더 많은 작업" [ref=f4e113] [cursor=pointer]
+            - generic [ref=f4e117]:
+              - heading "현대적인 사무실에서 화이트보드를 중심으로 협업하는 팀" [level=1] [ref=f4e119]
+              - paragraph [ref=f4e123]: Vitaly Gariev(@silverkblack)의 이 무료 사무실, 사업, 녹색 및 회의 HD 사진 다운로드
+              - generic [ref=f4e125]:
+                - generic [ref=f4e130]:
+                  - time [ref=f4e131]: 2025년 9월 26일(UTC)
+                  - text: 에 게시됨
+                - generic [ref=f4e135]:
+                  - link "Unsplash 라이선스" [ref=f4e136] [cursor=pointer]:
+                    - /url: /ko/%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4
+                  - text: 하에서 무료로 사용 가능
+            - generic [ref=f4e138]:
+              - link "사무실" [ref=f4e139] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%82%AC%EB%AC%B4%EC%8B%A4
+              - link "사업" [ref=f4e140] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%82%AC%EC%97%85
+              - link "녹색" [ref=f4e141] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EB%85%B9%EC%83%89
+              - link "회의" [ref=f4e142] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%9A%8C%EC%9D%98
+              - link "팀" [ref=f4e143] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%8C%80
+              - link "마케팅" [ref=f4e144] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EB%A7%88%EC%BC%80%ED%8C%85
+              - link "팀워크" [ref=f4e145] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%8C%80%EC%9B%8C%ED%81%AC
+              - link "프레젠테이션" [ref=f4e146] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%94%84%EB%A0%88%EC%A0%A0%ED%85%8C%EC%9D%B4%EC%85%98
+              - link "비즈니스 미팅" [ref=f4e147] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4-%EB%AF%B8%ED%8C%85
+              - link "쓰기" [ref=f4e148] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%93%B0%EA%B8%B0
+              - link "공부" [ref=f4e149] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EA%B3%B5%EB%B6%80
+              - link "보라색" [ref=f4e150] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EB%B3%B4%EB%9D%BC%EC%83%89
+              - link "성장" [ref=f4e151] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%84%B1%EC%9E%A5
+              - link "합작" [ref=f4e152] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%95%A9%EC%9E%91
+              - link "기업" [ref=f4e153] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EA%B8%B0%EC%97%85
+              - link "통신" [ref=f4e154] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%86%B5%EC%8B%A0
+              - link "전략" [ref=f4e155] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%A0%84%EB%9E%B5
+              - link "계획" [ref=f4e156] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EA%B3%84%ED%9A%8D
+              - link "혁신" [ref=f4e157] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%ED%98%81%EC%8B%A0
+              - link "얘기" [ref=f4e158] [cursor=pointer]:
+                - /url: /ko/s/%EC%82%AC%EC%A7%84/%EC%96%98%EA%B8%B0
+              - link "무료 사진" [ref=f4e159] [cursor=pointer]:
+                - /url: /ko/%ED%83%90%EC%83%89
+        - paragraph [ref=f4e165]: iStock에서 프리미엄 관련 이미지 찾아보기 | 코드 UNSPLASH20로 20% 할인 혜택 받기
+    - generic:
+      - region "Notifications"

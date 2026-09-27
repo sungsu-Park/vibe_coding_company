@@ -1,0 +1,363 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": "1",
+        "title": "Next.js 프로젝트 초기 설정 및 Tailwind CSS 구성",
+        "description": "Next.js 16 App Router 프로젝트를 생성하고 Tailwind CSS v4를 설정합니다 (최신 create-next-app 기본값)",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "details": "1. `npx create-next-app@latest` 명령어로 Next.js 16 프로젝트 생성 (App Router, TypeScript, Tailwind CSS v4 옵션 선택)\n2. package.json에 필요한 의존성 확인:\n   - next: 16.3.6\n   - react: 19.2.8\n   - react-dom: 19.2.8\n   - tailwindcss: ^4\n   - @tailwindcss/postcss: ^4\n3. **Tailwind v4 설정 방식 (tailwind.config.js 없음):**\n   - `app/globals.css`에 `@import \"tailwindcss\";` 추가\n   - `@theme inline` 블록에서 CSS 변수로 테마 정의\n   - 포인트 컬러: `--color-brand: #3b82f6;`\n   - 폰트 스택: `--font-sans: \"Pretendard Variable\", Pretendard, var(--font-inter), -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif;`\n4. **Pretendard 폰트 로드 (next/font 대신 CDN):**\n   - `app/layout.tsx`의 `<head>` 태그에 jsDelivr CDN 링크 추가\n   - URL: `https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css`\n   - Inter 폰트는 `next/font/google`로 로드하여 CSS 변수로 폴백 제공\n5. postcss.config.mjs 확인: `@tailwindcss/postcss` 플러그인 설정\n6. .gitignore 파일 확인 (node_modules, .next, out, .env* 포함)\n7. README.md에 프로젝트 설명 및 실행 방법 작성\n\n**app/globals.css 예시:**\n```css\n@import \"tailwindcss\";\n\n:root {\n  --background: #ffffff;\n  --foreground: #171717;\n}\n\n@theme inline {\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-brand: #3b82f6;\n  --font-sans: \"Pretendard Variable\", Pretendard, var(--font-inter),\n    -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif;\n}\n\nbody {\n  background: var(--background);\n  color: var(--foreground);\n}\n```\n\n**app/layout.tsx 폰트 로드 예시:**\n```tsx\nimport { Inter } from \"next/font/google\";\n\nconst inter = Inter({\n  variable: \"--font-inter\",\n  subsets: [\"latin\"],\n});\n\nexport default function RootLayout({ children }: LayoutProps<\"/\">) {\n  return (\n    <html lang=\"ko\" className={`${inter.variable} h-full antialiased`}>\n      <head>\n        <link\n          rel=\"stylesheet\"\n          as=\"style\"\n          crossOrigin=\"anonymous\"\n          href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css\"\n        />\n      </head>\n      <body className=\"flex min-h-full flex-col font-sans\">\n        {children}\n      </body>\n    </html>\n  );\n}\n```",
+        "testStrategy": "1. `npm run dev` 실행 시 개발 서버가 정상 작동하는지 확인 (http://localhost:3000)\n2. localhost:3000 접속 시 기본 Next.js 페이지가 표시되는지 확인\n3. Tailwind v4 클래스(예: `bg-brand`, `text-foreground`, `font-sans`)가 적용되는지 테스트\n4. 브라우저 개발자 도구에서 Pretendard 폰트가 로드되었는지 확인 (Network 탭)\n5. **`npm run build` 실행 시 빌드가 성공하는지 확인 (필수)**\n6. **`npm run lint` 실행 시 린트 오류가 없는지 확인 (필수)**",
+        "subtasks": [],
+        "complexity": 2,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-09-27T06:31:14.404Z"
+      },
+      {
+        "id": "2",
+        "title": "프로젝트 구조 및 공통 레이아웃 컴포넌트 생성",
+        "description": "폴더 구조를 설정하고 헤더, 푸터 등 공통 레이아웃 컴포넌트를 구현합니다",
+        "status": "done",
+        "dependencies": [
+          "1"
+        ],
+        "priority": "high",
+        "details": "**구현 완료된 폴더 구조:**\n```\napp/\n  layout.tsx (루트 레이아웃, lang=\"ko\", Header/Footer 통합, Pretendard Variable 폰트 CDN)\n  page.tsx (메인 페이지)\n  contact/\n    page.tsx (placeholder 완료)\n  process/\n    page.tsx (placeholder 완료)\ncomponents/\n  Header.tsx ('use client', sticky, 로고 배지 VC, 햄버거 토글, usePathname active)\n  Footer.tsx (로고+copyright+푸터 nav)\npublic/\n  images/\n    .gitkeep\napp/globals.css (LinkedIn 블루 브랜드 토큰: #0A66C2, hover #004182, soft tint #EEF3F8)\n```\n\n**Header.tsx 구현 완료 (components/Header.tsx):**\n- `'use client'` directive 사용 (useState, usePathname 훅 활용)\n- sticky header (top-0 z-50)\n- 로고 배지 \"VC\" 표시 (브랜드 블루 배경)\n- 데스크톱: 가로 네비게이션 메뉴 (홈, 컨설팅 프로세스) + 브랜드 filled CTA 버튼 \"문의하기\"\n- 모바일: 햄버거 버튼(☰/✕) + 토글 드롭다운 메뉴\n- usePathname으로 현재 경로 active 하이라이트 (브랜드 색상)\n- 접근성: aria-expanded, aria-controls, sr-only 적용\n- 모바일 메뉴 링크 클릭 시 자동 닫힘 (onClick={() => setIsMenuOpen(false)))\n\n**Footer.tsx 구현 완료 (components/Footer.tsx):**\n- 로고 \"Vibe Coding\" 표시\n- 동적 연도 표시 (`new Date().getFullYear()`)\n- 저작권 정보 (\"© {year} Vibe Coding. All rights reserved.\")\n- 푸터 네비게이션 (홈, 컨설팅 프로세스, 문의하기 링크)\n- 미니멀한 디자인, 브랜드 호버 효과\n\n**layout.tsx 구현 완료 (app/layout.tsx):**\n- HTML lang=\"ko\" 설정\n- Pretendard Variable 폰트 CDN 로드 (link rel=\"stylesheet\")\n- Inter 폰트 fallback 설정\n- flex 레이아웃으로 Footer 하단 고정 (min-h-full, flex-col, flex-1)\n- Header와 Footer를 모든 페이지에 포함\n- Metadata 설정 (title, description)\n\n**globals.css 브랜드 토큰 결정 완료:**\n- PRD 10절 '포인트 컬러 지정 필요' 해소\n- LinkedIn 블루 팔레트 적용:\n  - Primary: #0A66C2\n  - Hover: #004182\n  - Soft tint: #EEF3F8\n- Tailwind CSS 커스텀 색상으로 통합\n\n**Placeholder 페이지 구현 완료:**\n- app/process/page.tsx: 타임라인 준비 중 메시지\n- app/contact/page.tsx: 문의 폼 준비 중 메시지\n- 네비게이션 라우팅 테스트 가능한 상태\n\n**검증 완료:**\n- npm run lint 통과 (0 warnings, 0 errors)\n- npm run build 성공 (프로덕션 빌드 검증)\n- npm run dev + Playwright 테스트:\n  - 데스크톱(1280px) / 모바일(375px) 양쪽 화면 크기 확인\n  - 홈(/) / 컨설팅 프로세스(/process) / 문의하기(/contact) 라우팅 정상 동작\n  - 초기 1회 Turbopack dev 캐시로 404 발생했으나 .next 삭제 후 재기동으로 해결\n  - 햄버거 메뉴 열기/닫기 동작 확인\n  - 모바일 메뉴 링크 클릭 시 자동 닫힘 확인\n  - 콘솔 에러 0건\n  - usePathname active 하이라이트 정상 작동",
+        "testStrategy": "**완료된 테스트:**\n1. ✓ 모든 페이지(/, /process, /contact)에서 헤더와 푸터가 표시되는지 확인\n2. ✓ 헤더의 네비게이션 링크 클릭 시 해당 페이지로 이동하는지 테스트\n3. ✓ npm run lint 통과 (0 warnings, 0 errors)\n4. ✓ npm run build 성공 (프로덕션 빌드 검증)\n5. ✓ npm run dev 서버로 /, /process, /contact 모두 정상 응답 확인\n6. ✓ Playwright 테스트로 데스크톱(1280px)/모바일(375px) 양쪽 화면 크기 검증\n7. ✓ 햄버거 메뉴 열기/닫기 동작 확인 (☰ ↔ ✕ 아이콘 전환)\n8. ✓ 모바일 메뉴 링크 클릭 시 자동 닫힘 확인\n9. ✓ usePathname으로 현재 경로 active 하이라이트 정상 작동\n10. ✓ 콘솔 에러 0건 확인\n11. ✓ sticky header 스크롤 시 상단 고정 확인\n12. ✓ LinkedIn 블루 브랜드 색상(#0A66C2) 적용 확인\n13. ✓ Turbopack dev 캐시 이슈 해결 (.next 삭제 후 재기동)\n\n**추가 검증 완료:**\n- Pretendard Variable 폰트가 Network 탭에서 정상 로드되는지 확인\n- 데스크톱에서 CTA 버튼 \"문의하기\"가 브랜드 filled 스타일로 표시되는지 확인\n- Footer 네비게이션 링크 호버 시 브랜드 색상 적용 확인\n- 로고 배지 \"VC\"가 모든 페이지 헤더에 일관되게 표시되는지 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "프로젝트 폴더 구조 생성 및 placeholder 이미지 준비",
+            "description": "app/ 및 components/ 디렉토리 구조 설정, public/images/ 폴더에 placeholder 이미지 준비",
+            "dependencies": [],
+            "details": "- app/contact/page.tsx, app/process/page.tsx placeholder 파일 생성 (네비게이션 라우팅 테스트용)\n- components/ 폴더 생성\n- public/images/ 폴더에 .gitkeep 생성\n- 실제 구현: app/process/page.tsx, app/contact/page.tsx는 \"준비 중\" 메시지만 표시하는 간단한 컴포넌트로 구현 완료",
+            "status": "done",
+            "testStrategy": "폴더 구조가 올바르게 생성되었는지 확인, public/images/.gitkeep 파일 존재 확인",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "Header.tsx 컴포넌트 구현 (네비게이션, 로고 배지, 모바일 반응형, active 하이라이트)",
+            "description": "'use client' directive를 사용한 클라이언트 컴포넌트로 햄버거 메뉴 토글 기능 및 usePathname active 하이라이트 구현",
+            "dependencies": [
+              1
+            ],
+            "details": "**구현 완료 내용:**\n- 파일: components/Header.tsx\n- 'use client' directive 사용 (useState, usePathname 훅 활용)\n- sticky header (top-0 z-50)\n- 로고 배지 \"VC\" 표시 (브랜드 블루 배경, #0A66C2)\n- useState로 모바일 메뉴 토글 상태 관리\n- usePathname으로 현재 경로 감지 및 active 링크 하이라이트 (브랜드 색상)\n- NAV_ITEMS 배열로 메뉴 항목 정의 (홈, 컨설팅 프로세스)\n- 데스크톱: `hidden md:flex` 가로 메뉴 + 브랜드 filled CTA 버튼 \"문의하기\"\n- 모바일: 햄버거 버튼(☰/✕) + 조건부 렌더링 세로 메뉴\n- 접근성: aria-expanded, aria-controls, sr-only 적용\n- 모바일 메뉴 링크 클릭 시 자동 닫힘 (onClick={() => setIsMenuOpen(false)))\n- hover:text-brand, hover:bg-brand-hover 인터랙션",
+            "status": "done",
+            "testStrategy": "- 데스크톱(≥768px)에서 가로 메뉴 표시 확인\n- 모바일(<768px)에서 햄버거 버튼 표시 및 토글 동작 확인\n- 메뉴 링크 클릭 시 페이지 이동 및 모바일 메뉴 자동 닫힘 확인\n- sticky header 스크롤 시 상단 고정 확인\n- usePathname active 하이라이트가 현재 페이지에만 적용되는지 확인\n- 로고 배지 \"VC\"가 모든 화면 크기에서 표시되는지 확인\n- CTA 버튼 \"문의하기\"가 데스크톱에서 브랜드 filled 스타일로 표시되는지 확인",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "Footer.tsx 구현 및 layout.tsx 통합, globals.css 브랜드 토큰 설정",
+            "description": "Footer 컴포넌트 구현 (로고+copyright+푸터 nav) 및 루트 레이아웃에서 Header/Footer 통합, LinkedIn 블루 브랜드 색상 설정",
+            "dependencies": [
+              2
+            ],
+            "details": "**구현 완료 내용:**\n- components/Footer.tsx: 로고 \"Vibe Coding\" 표시, 동적 연도 표시, 저작권 정보, 푸터 네비게이션 링크 (홈, 컨설팅 프로세스, 문의하기), 브랜드 호버 효과\n- app/layout.tsx:\n  - lang=\"ko\" 설정\n  - Pretendard Variable 폰트 CDN 로드 (link rel=\"stylesheet\")\n  - Inter 폰트 fallback\n  - flex 레이아웃으로 Footer 하단 고정 (min-h-full flex-col, main에 flex-1)\n  - Header/Footer를 모든 페이지에 포함\n  - Metadata 설정 (title, description)\n- app/globals.css:\n  - PRD 10절 '포인트 컬러 지정 필요' 해소\n  - LinkedIn 블루 팔레트 적용 (Primary: #0A66C2, Hover: #004182, Soft tint: #EEF3F8)\n  - Tailwind CSS 커스텀 색상으로 통합 (brand, brand-hover, brand-soft)",
+            "status": "done",
+            "testStrategy": "- 모든 페이지에서 Footer가 하단에 고정되는지 확인 (내용이 짧을 때도)\n- lang=\"ko\" 속성이 html 태그에 적용되었는지 확인\n- Pretendard Variable 폰트가 Network 탭에서 정상 로드되는지 확인\n- Header와 Footer 사이에 main 콘텐츠가 flex-1로 확장되는지 확인\n- Footer 네비게이션 링크 클릭 시 해당 페이지로 이동하는지 테스트\n- Footer 네비게이션 링크 호버 시 브랜드 색상(#0A66C2) 적용되는지 확인\n- 로고 \"Vibe Coding\"이 Footer에 표시되는지 확인\n- 브랜드 색상이 Header CTA 버튼, active 링크, 호버 효과에 일관되게 적용되는지 확인",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 4,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "이 작업을 다음 하위 작업으로 나누세요: 1) 프로젝트 폴더 구조 생성 및 placeholder 이미지 준비, 2) Header.tsx 컴포넌트 구현 (네비게이션 및 모바일 반응형), 3) Footer.tsx 구현 및 layout.tsx 통합",
+        "updatedAt": "2026-09-27T06:45:20.179Z"
+      },
+      {
+        "id": "3",
+        "title": "이미지 슬라이드 컴포넌트 구현 (캐러셀)",
+        "description": "메인 페이지 최상단에 표시될 이미지 슬라이드(캐러셀)를 구현합니다",
+        "status": "done",
+        "dependencies": [
+          "2"
+        ],
+        "priority": "high",
+        "details": "**ImageSlider.tsx 컴포넌트 구현 완료 (components/ImageSlider.tsx):**\n\n```tsx\n'use client';\nimport Image from 'next/image';\nimport { useCallback, useEffect, useState } from 'react';\n\nconst SLIDES = [\n  { src: '/images/slide1.png', alt: '슬라이드 1' },\n  { src: '/images/slide2.png', alt: '슬라이드 2' },\n  { src: '/images/slide3.png', alt: '슬라이드 3' },\n];\n\nconst AUTO_PLAY_INTERVAL_MS = 5000;\n\nexport default function ImageSlider() {\n  const [currentIndex, setCurrentIndex] = useState(0);\n\n  const goToPrevious = useCallback(() => {\n    setCurrentIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);\n  }, []);\n\n  const goToNext = useCallback(() => {\n    setCurrentIndex((prev) => (prev + 1) % SLIDES.length);\n  }, []);\n\n  useEffect(() => {\n    const interval = setInterval(goToNext, AUTO_PLAY_INTERVAL_MS);\n    return () => clearInterval(interval);\n  }, [goToNext]);\n\n  return (\n    <div className=\"relative h-[240px] w-full overflow-hidden bg-zinc-900 sm:h-[360px] md:h-[480px]\">\n      {SLIDES.map((slide, index) => (\n        <Image\n          key={slide.src}\n          src={slide.src}\n          alt={slide.alt}\n          fill\n          priority={index === 0}\n          sizes=\"100vw\"\n          className={`object-cover transition-opacity duration-700 ${\n            index === currentIndex ? 'opacity-100' : 'opacity-0'\n          }`}\n        />\n      ))}\n\n      <button\n        type=\"button\"\n        onClick={goToPrevious}\n        aria-label=\"이전 슬라이드\"\n        className=\"absolute top-1/2 left-3 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-xl text-white transition-colors hover:bg-black/60 sm:left-6\"\n      >\n        ‹\n      </button>\n      <button\n        type=\"button\"\n        onClick={goToNext}\n        aria-label=\"다음 슬라이드\"\n        className=\"absolute top-1/2 right-3 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-xl text-white transition-colors hover:bg-black/60 sm:right-6\"\n      >\n        ›\n      </button>\n\n      <div className=\"absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2\">\n        {SLIDES.map((slide, index) => (\n          <button\n            key={slide.src}\n            type=\"button\"\n            onClick={() => setCurrentIndex(index)}\n            aria-label={`${index + 1}번 슬라이드로 이동`}\n            aria-current={index === currentIndex}\n            className={`h-3 w-3 rounded-full transition-colors ${\n              index === currentIndex ? 'bg-white' : 'bg-white/50'\n            }`}\n          />\n        ))}\n      </div>\n    </div>\n  );\n}\n```\n\n**핵심 구현 방식:**\n- **크로스페이드 효과**: next/image의 fill 모드로 3장 이미지를 겹쳐 배치하고, `opacity` transition (duration-700)으로 자연스러운 크로스페이드 전환\n- **자동 전환**: useEffect + setInterval로 5초마다 자동 전환\n- **네비게이션**: 좌우 화살표 버튼 (‹ ›), 인디케이터 dot 클릭으로 직접 이동\n- **반응형**: h-[240px] sm:h-[360px] md:h-[480px]로 화면 크기별 높이 조정\n- **접근성**: aria-label, aria-current 추가\n\n**placeholder 이미지 (public/images/):**\n- slide1.png, slide2.png, slide3.png (1600x900 PNG)\n- 순수 Python (zlib 모듈)으로 생성한 단색 PNG\n- 무채색(화이트/그레이) + 브랜드 블루 조합\n- **추후 실제 사진으로 교체 필요** (현재는 개발용 placeholder)",
+        "testStrategy": "1. 슬라이드가 5초마다 자동으로 전환되는지 확인 (opacity transition으로 크로스페이드)\n2. 좌우 화살표 버튼 (‹ ›) 클릭 시 이전/다음 이미지로 이동하는지 테스트\n3. 인디케이터 dot 클릭 시 해당 슬라이드로 즉시 이동하는지 확인\n4. Next.js Image 컴포넌트가 이미지 최적화를 수행하는지 검증 (Network 탭에서 WebP 형식 확인)\n5. 모바일(240px), 태블릿(360px), 데스크톱(480px) 높이가 적절하게 조정되는지 확인\n6. 첫 번째 이미지(index === 0)에 priority 속성이 적용되어 즉시 로드되는지 확인\n7. 3장의 이미지가 겹쳐진 상태에서 opacity 전환만 발생하는지 확인 (Layout Shift 없음)",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "기본 슬라이드 컴포넌트 구조 및 이미지 표시 구현",
+            "description": "ImageSlider 컴포넌트의 기본 구조를 생성하고 Next.js Image 컴포넌트를 사용해 첫 번째 이미지를 표시합니다",
+            "dependencies": [],
+            "details": "components/ImageSlider.tsx 파일을 생성하고 'use client' 지시어를 추가합니다. useState로 currentIndex 상태를 관리하고, Next.js Image 컴포넌트로 images 배열의 현재 인덱스 이미지를 표시합니다. public/images/ 폴더에 placeholder 이미지 3개(slide1.jpg, slide2.jpg, slide3.jpg)를 추가합니다. 반응형 높이를 위해 h-[300px] md:h-[500px] 클래스를 적용하고, Image 컴포넌트의 fill, object-cover, priority 속성을 설정합니다.",
+            "status": "done",
+            "testStrategy": "개발 서버에서 ImageSlider 컴포넌트가 렌더링되고 첫 번째 이미지가 표시되는지 확인합니다. Next.js DevTools에서 Image 컴포넌트가 최적화된 이미지를 로드하는지 검증합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.502Z"
+          },
+          {
+            "id": 2,
+            "title": "자동 전환 로직 구현 (useEffect + setInterval)",
+            "description": "5초마다 슬라이드가 자동으로 다음 이미지로 전환되는 로직을 구현합니다",
+            "dependencies": [
+              1
+            ],
+            "details": "useEffect 훅을 사용해 컴포넌트 마운트 시 setInterval을 설정합니다. 5000ms(5초)마다 setCurrentIndex를 호출하여 인덱스를 1 증가시키고, 마지막 이미지 후에는 첫 번째 이미지로 순환하도록 (prev + 1) % images.length 연산을 적용합니다. cleanup 함수에서 clearInterval을 호출하여 메모리 누수를 방지합니다.",
+            "status": "done",
+            "testStrategy": "브라우저에서 슬라이드를 열고 5초 간격으로 이미지가 자동 전환되는지 확인합니다. 마지막 이미지 후 첫 번째 이미지로 순환하는지 검증합니다. React DevTools로 메모리 누수가 없는지 확인합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.514Z"
+          },
+          {
+            "id": 3,
+            "title": "좌우 버튼 네비게이션 구현",
+            "description": "이전/다음 슬라이드로 이동하는 화살표 버튼을 구현합니다",
+            "dependencies": [
+              2
+            ],
+            "details": "goToPrevious와 goToNext 함수를 구현합니다. goToPrevious는 (prev - 1 + images.length) % images.length로 이전 이미지로 이동하고, goToNext는 (prev + 1) % images.length로 다음 이미지로 이동합니다. absolute 위치의 버튼을 좌우에 배치하고 (left-4, right-4, top-1/2, -translate-y-1/2), 화살표 아이콘(← →) 또는 SVG 아이콘을 추가합니다. 버튼 클릭 시 자동 전환 타이머를 리셋하도록 개선할 수 있습니다.",
+            "status": "done",
+            "testStrategy": "좌측 화살표 버튼 클릭 시 이전 이미지로 이동하는지 확인합니다. 우측 화살표 버튼 클릭 시 다음 이미지로 이동하는지 확인합니다. 첫 번째 이미지에서 좌측 버튼 클릭 시 마지막 이미지로 이동하는지 검증합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.530Z"
+          },
+          {
+            "id": 4,
+            "title": "인디케이터 dots 구현 및 모바일 반응형 조정",
+            "description": "현재 슬라이드를 표시하는 인디케이터 dots를 구현하고 모바일 화면에 최적화합니다",
+            "dependencies": [
+              3
+            ],
+            "details": "images.map으로 각 이미지에 해당하는 dot 버튼을 생성합니다. absolute bottom-4 left-1/2 -translate-x-1/2로 하단 중앙에 배치하고, 현재 인덱스와 일치하는 dot는 bg-white, 나머지는 bg-white/50 클래스를 적용합니다. dot 클릭 시 setCurrentIndex(idx)로 해당 슬라이드로 이동합니다. 모바일에서는 버튼 크기를 w-2 h-2 md:w-3 md:h-3로 조정하고, 슬라이드 높이를 h-[300px] md:h-[500px]로 반응형 설정합니다.",
+            "status": "done",
+            "testStrategy": "3개의 인디케이터 dots가 하단 중앙에 표시되는지 확인합니다. 현재 활성 슬라이드의 dot가 밝게 표시되는지 검증합니다. dot 클릭 시 해당 슬라이드로 즉시 이동하는지 테스트합니다. Chrome DevTools의 Responsive Mode로 375px에서 버튼과 슬라이드 높이가 적절히 조정되는지 확인합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.537Z"
+          },
+          {
+            "id": 5,
+            "title": "크로스페이드 효과 구현 (opacity transition)",
+            "description": "next/image fill 모드로 이미지를 겹쳐 배치하고 opacity transition으로 부드러운 크로스페이드 효과를 구현합니다",
+            "dependencies": [
+              1
+            ],
+            "details": "기존 단일 Image 컴포넌트 대신 SLIDES.map()으로 3장의 Image를 모두 렌더링하고 fill 속성으로 겹쳐 배치합니다 (components/ImageSlider.tsx:32-44). className에 `transition-opacity duration-700` 추가하고, currentIndex와 일치하는 이미지만 `opacity-100`, 나머지는 `opacity-0` 적용합니다. priority 속성은 index === 0인 첫 번째 이미지에만 적용하고, sizes=\"100vw\"로 반응형 이미지 최적화를 설정합니다. 부모 div에 overflow-hidden을 추가해 레이아웃 안정성을 확보합니다.",
+            "status": "done",
+            "testStrategy": "브라우저 개발자 도구 Elements 탭에서 3개의 Image 컴포넌트가 동시에 렌더링되고 position: absolute로 겹쳐있는지 확인합니다. 슬라이드 전환 시 opacity만 변경되고 DOM 재배치가 없는지 Performance 탭으로 검증합니다. 크로스페이드 애니메이션이 700ms 동안 부드럽게 진행되는지 시각적으로 확인합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.546Z"
+          },
+          {
+            "id": 6,
+            "title": "Python으로 placeholder PNG 이미지 생성",
+            "description": "실제 사진이 없는 상태이므로 순수 Python (zlib)으로 단색 PNG 3장을 생성합니다",
+            "dependencies": [],
+            "details": "Python 스크립트로 1600x900 PNG 이미지 3장을 생성합니다. zlib 모듈을 사용해 PNG IHDR, IDAT, IEND 청크를 직접 작성하여 무채색(흰색 #FFFFFF, 회색 #6B7280) + 브랜드 블루(#3B82F6) 조합의 단색 이미지를 만듭니다. 생성된 파일은 public/images/slide1.png, slide2.png, slide3.png로 저장합니다. **이 이미지들은 임시 placeholder이며 추후 실제 사진으로 교체가 필요**함을 코드 주석 또는 README에 명시합니다.",
+            "status": "done",
+            "testStrategy": "생성된 PNG 파일이 public/images/ 폴더에 정상적으로 저장되었는지 확인합니다. file 명령어 또는 이미지 뷰어로 1600x900 PNG 형식인지 검증합니다. Next.js 개발 서버에서 이미지가 정상적으로 로드되고 표시되는지 테스트합니다. 브라우저 Network 탭에서 이미지 크기가 적절한지 확인합니다 (각 이미지 < 50KB 예상).",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:08:26.555Z"
+          }
+        ],
+        "complexity": 5,
+        "recommendedSubtasks": 4,
+        "expansionPrompt": "이 작업을 다음 하위 작업으로 나누세요: 1) 기본 슬라이드 컴포넌트 구조 및 이미지 표시, 2) 자동 전환 로직 구현 (useEffect + setInterval), 3) 좌우 버튼 네비게이션 구현, 4) 인디케이터 dots 구현 및 모바일 반응형 조정",
+        "updatedAt": "2026-09-27T07:08:26.555Z"
+      },
+      {
+        "id": "4",
+        "title": "메인 페이지 구현 (회사 소개 및 CTA)",
+        "description": "메인 페이지에 이미지 슬라이드, 회사 소개, 문의 유도 버튼을 배치합니다",
+        "status": "done",
+        "dependencies": [
+          "3"
+        ],
+        "priority": "high",
+        "details": "**app/page.tsx 구현 (실제 구현 완료):**\n\n현재 `app/page.tsx`는 다음 구조로 구현되어 있습니다:\n\n```tsx\nimport Link from \"next/link\";\nimport ImageSlider from \"@/components/ImageSlider\";\n\nexport default function Home() {\n  return (\n    <div>\n      <ImageSlider />\n\n      <section className=\"mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-16 text-center sm:py-24\">\n        <h1 className=\"text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl\">\n          바이브 코딩 컨설팅\n        </h1>\n        <p className=\"text-lg font-medium text-zinc-700 sm:text-xl\">\n          코드에 생명을 불어넣는 컨설팅 파트너\n        </p>\n        <p className=\"max-w-xl text-sm leading-relaxed text-zinc-600 sm:text-base\">\n          바이브 코딩은 단순히 코드를 작성하는 것을 넘어, 비즈니스의 본질을\n          이해하고 기술적 가치를 창출하는 컨설팅 서비스를 제공합니다. 귀사의\n          성장과 혁신을 위한 최적의 솔루션을 함께 만들어갑니다.\n        </p>\n\n        <Link\n          href=\"/contact\"\n          className=\"mt-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-white transition-colors hover:opacity-90 sm:px-8 sm:py-3.5 sm:text-base\"\n        >\n          컨설팅 문의하기\n        </Link>\n      </section>\n    </div>\n  );\n}\n```\n\n**주요 구현 사항:**\n\n1. **ImageSlider 통합** (`app/page.tsx:7`)\n   - `components/ImageSlider.tsx`에서 import\n   - 3개 슬라이드 자동 전환 (5초 간격)\n   - 반응형 높이: 240px(모바일) → 360px(sm) → 480px(md)\n\n2. **회사 소개 섹션** (`app/page.tsx:9-28`)\n   - 제목: \"바이브 코딩 컨설팅\" (h1)\n   - 서브타이틀: \"코드에 생명을 불어넣는 컨설팅 파트너\" (p)\n   - 본문: 회사 소개 텍스트 (p)\n\n3. **반응형 텍스트 크기 적용** (Tailwind CSS 반응형 클래스 사용)\n   - 제목: `text-2xl sm:text-3xl`\n   - 서브타이틀: `text-lg sm:text-xl`\n   - 본문: `text-sm sm:text-base`\n   - 버튼: `text-sm sm:text-base`, `px-6 py-3 sm:px-8 sm:py-3.5`\n\n4. **반응형 여백 적용**\n   - 섹션 패딩: `py-16 sm:py-24`\n   - 최대 너비: `max-w-3xl`\n   - flexbox gap: `gap-6`\n\n5. **CTA 버튼** (`app/page.tsx:22-27`)\n   - Link 컴포넌트로 `/contact` 연결\n   - 브랜드 색상 배경 (`bg-brand`, 실제 색상: `#3b82f6`)\n   - hover 효과: `hover:opacity-90`\n   - 둥근 모서리: `rounded-full`\n\n**디자인 원칙 준수:**\n- 무채색(zinc) + 포인트 컬러(brand) 조화\n- 넉넉한 여백 (py-16/24, px-6, gap-6)\n- 최소한의 장식 (transition-colors만 사용)\n- 깔끔한 타이포그래피 (tracking-tight, leading-relaxed)\n\n**참조 파일:**\n- `app/page.tsx` (메인 페이지 구현)\n- `components/ImageSlider.tsx` (슬라이더 컴포넌트)\n- `app/globals.css` (Tailwind 테마 정의: `--color-brand`, `--font-sans`)",
+        "testStrategy": "1. 메인 페이지 접속 시 ImageSlider와 회사 소개가 순서대로 표시되는지 확인 (실제 파일: `app/page.tsx:7`, `app/page.tsx:9-28`)\n2. \"컨설팅 문의하기\" 버튼 클릭 시 /contact 페이지로 이동하는지 테스트 (`app/page.tsx:22-27`의 Link href=\"/contact\")\n3. 텍스트가 중앙 정렬되고 가독성이 좋은지 확인 (`text-center`, `leading-relaxed` 적용 확인)\n4. **반응형 테스트 (CRITICAL):**\n   - 모바일 (375px): 제목 `text-2xl`, 서브타이틀 `text-lg`, 본문 `text-sm`, 패딩 `py-16`\n   - 태블릿/데스크톱 (768px+): 제목 `text-3xl`, 서브타이틀 `text-xl`, 본문 `text-base`, 패딩 `py-24`\n   - ImageSlider 높이: 240px(모바일) → 360px(640px+) → 480px(768px+)\n5. 브랜드 색상(#3b82f6)이 CTA 버튼에 올바르게 적용되는지 확인 (`bg-brand` 클래스)\n6. `npm run dev`로 개발 서버 실행 후 localhost:3000에서 시각적 확인\n7. Chrome DevTools Responsive Mode로 다양한 화면 크기에서 레이아웃 검증",
+        "subtasks": [],
+        "complexity": 3,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-09-27T06:52:55.821Z"
+      },
+      {
+        "id": "5",
+        "title": "컨설팅 문의 페이지 UI 구현",
+        "description": "문의 폼 입력 필드와 기본 레이아웃을 구현하고, 클라이언트 측 유효성 검사까지 완료합니다",
+        "status": "done",
+        "dependencies": [
+          "2"
+        ],
+        "priority": "high",
+        "details": "**구현 완료 상태:**\n\n`app/contact/page.tsx`와 `components/ContactForm.tsx`가 UI + 유효성 검사를 포함한 완전한 폼으로 구현되어 있습니다.\n\n**app/contact/page.tsx 구현 완료:**\n\n```tsx\nimport Link from \"next/link\";\nimport ContactForm from \"@/components/ContactForm\";\n\nexport default function ContactPage() {\n  return (\n    <div className=\"mx-auto max-w-lg px-6 py-16 sm:py-24\">\n      <h1 className=\"text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl\">\n        컨설팅 문의\n      </h1>\n      <p className=\"mt-3 text-sm text-zinc-600 sm:text-base\">\n        아래 정보를 입력하시면 빠른 시일 내에 연락드리겠습니다.\n      </p>\n\n      <div className=\"mt-8\">\n        <ContactForm />\n      </div>\n\n      <Link\n        href=\"/\"\n        className=\"mt-8 inline-block text-sm font-medium text-zinc-500 transition-colors hover:text-brand\"\n      >\n        ← 메인 페이지로 돌아가기\n      </Link>\n    </div>\n  );\n}\n```\n\n**components/ContactForm.tsx 구현 완료 (UI + 유효성 검사 통합):**\n\n```tsx\n'use client';\nimport { useState } from 'react';\n\ntype FormData = {\n  name: string;\n  phone: string;\n  email: string;\n};\n\ntype FormErrors = Partial<Record<keyof FormData, string>>;\n\nconst INITIAL_FORM_DATA: FormData = { name: '', phone: '', email: '' };\nconst PHONE_REGEX = /^\\d{3}-\\d{4}-\\d{4}$/;\nconst EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction validate(data: FormData): FormErrors {\n  const errors: FormErrors = {};\n  \n  if (!data.name.trim()) {\n    errors.name = '이름을 입력해주세요.';\n  }\n  \n  if (!data.phone.trim()) {\n    errors.phone = '전화번호를 입력해주세요.';\n  } else if (!PHONE_REGEX.test(data.phone)) {\n    errors.phone = '올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)';\n  }\n  \n  if (!data.email.trim()) {\n    errors.email = '이메일을 입력해주세요.';\n  } else if (!EMAIL_REGEX.test(data.email)) {\n    errors.email = '올바른 이메일 형식이 아닙니다.';\n  }\n  \n  return errors;\n}\n\nexport default function ContactForm() {\n  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);\n  const [errors, setErrors] = useState<FormErrors>({});\n  const [submitted, setSubmitted] = useState(false);\n\n  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {\n    const { name, value } = event.target;\n    setFormData((prev) => ({ ...prev, [name]: value }));\n    setErrors((prev) => (prev[name as keyof FormData] ? { ...prev, [name]: undefined } : prev));\n  };\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const nextErrors = validate(formData);\n    setErrors(nextErrors);\n\n    if (Object.keys(nextErrors).length === 0) {\n      setSubmitted(true);\n      // 실제 서버 전송/이메일 발송은 구현하지 않음 (PRD 범위 밖)\n    }\n  };\n\n  if (submitted) {\n    return (\n      <div className=\"rounded-2xl border border-zinc-200 bg-zinc-50 px-6 py-12 text-center\">\n        <p className=\"text-lg font-semibold text-zinc-900\">\n          문의가 접수되었습니다!\n        </p>\n        <p className=\"mt-2 text-sm text-zinc-600\">\n          빠른 시일 내에 연락드리겠습니다.\n        </p>\n      </div>\n    );\n  }\n\n  const FIELDS = [\n    { name: 'name', label: '이름', type: 'text', placeholder: '홍길동', autoComplete: 'name' },\n    { name: 'phone', label: '전화번호', type: 'tel', placeholder: '010-1234-5678', autoComplete: 'tel' },\n    { name: 'email', label: '이메일', type: 'email', placeholder: 'example@email.com', autoComplete: 'email' },\n  ];\n\n  return (\n    <form onSubmit={handleSubmit} noValidate className=\"flex flex-col gap-5\">\n      {FIELDS.map((field) => {\n        const errorId = `${field.name}-error`;\n        const error = errors[field.name as keyof FormData];\n\n        return (\n          <div key={field.name} className=\"flex flex-col gap-1.5\">\n            <label\n              htmlFor={field.name}\n              className=\"text-sm font-medium text-zinc-700\"\n            >\n              {field.label} <span className=\"text-brand\">*</span>\n            </label>\n            <input\n              id={field.name}\n              name={field.name}\n              type={field.type}\n              autoComplete={field.autoComplete}\n              placeholder={field.placeholder}\n              value={formData[field.name as keyof FormData]}\n              onChange={handleChange}\n              aria-invalid={Boolean(error)}\n              aria-describedby={error ? errorId : undefined}\n              className={`h-12 rounded-lg border px-4 text-base text-zinc-900 outline-none transition-colors focus:ring-2 focus:ring-brand ${\n                error ? 'border-red-400' : 'border-zinc-300'\n              }`}\n            />\n            {error && (\n              <p id={errorId} className=\"text-sm text-red-500\">\n                {error}\n              </p>\n            )}\n          </div>\n        );\n      })}\n\n      <button\n        type=\"submit\"\n        className=\"mt-2 h-12 rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:opacity-90 sm:text-base\"\n      >\n        문의하기\n      </button>\n    </form>\n  );\n}\n```\n\n**주요 구현 특징:**\n\n1. **UI 요소:**\n   - 3개 입력 필드: 이름(text), 전화번호(tel), 이메일(email)\n   - 각 필드에 적절한 placeholder 및 autoComplete 속성\n   - 포인트 컬러(`text-brand`) 사용한 필수 표시(*)\n   - `focus:ring-2 focus:ring-brand` 스타일 적용\n   - 메인 페이지로 돌아가기 링크 포함\n\n2. **유효성 검사 (Task 6 통합):**\n   - 빈 값 검사 (모든 필드)\n   - 전화번호 형식 검사 (`010-1234-5678` 패턴)\n   - 이메일 형식 검사 (정규식 기반)\n   - 실시간 에러 메시지 표시 (입력 필드 하단)\n   - 에러 시 빨간색 테두리 표시 (`border-red-400`)\n   - aria-invalid, aria-describedby 접근성 속성\n\n3. **제출 후 처리:**\n   - 유효성 검사 통과 시 성공 메시지 표시\n   - 실제 서버 전송/이메일 발송은 구현하지 않음 (PRD 범위 외)\n\n4. **반응형 디자인:**\n   - `sm:` breakpoint로 모바일/데스크톱 텍스트 크기 조정\n   - 최대 너비 `max-w-lg`로 폼 중앙 정렬\n   - 터치 친화적인 입력 필드 높이 (`h-12`)\n\n**파일 위치:**\n- `app/contact/page.tsx:1-27`\n- `components/ContactForm.tsx:1-152`\n- Tailwind 브랜드 색상: `app/globals.css:11` (`--color-brand: #3b82f6`)",
+        "testStrategy": "**완료된 구현 검증 테스트:**\n\n1. **UI 렌더링:**\n   - /contact 페이지 접속 시 폼이 표시되는지 확인\n   - 입력 필드가 3개(이름, 전화번호, 이메일) 모두 렌더링되는지 검증\n   - placeholder 텍스트가 각 필드에 올바르게 표시되는지 확인\n   - 메인 페이지로 돌아가기 링크가 페이지 하단에 표시되는지 확인\n\n2. **스타일 적용:**\n   - 포커스 시 `focus:ring-2 focus:ring-brand` 스타일이 적용되는지 확인 (파란색 테두리)\n   - 필수 표시(*)가 브랜드 색상(`text-brand`)으로 표시되는지 확인\n   - 에러 시 입력 필드에 빨간색 테두리(`border-red-400`)가 표시되는지 확인\n\n3. **유효성 검사 (Task 6 통합 검증):**\n   - 빈 이름으로 제출 시 \"이름을 입력해주세요.\" 에러 메시지 표시 확인\n   - 잘못된 전화번호 형식(예: \"123456\") 입력 시 에러 메시지 확인\n   - 올바른 전화번호 형식(010-1234-5678) 입력 시 에러가 없는지 확인\n   - 잘못된 이메일 형식(예: \"test\") 입력 시 에러 메시지 확인\n   - 올바른 이메일 형식 입력 시 에러가 없는지 확인\n   - 입력 중 에러가 자동으로 사라지는지 확인 (onChange 이벤트)\n\n4. **제출 후 동작:**\n   - 모든 유효성 검사 통과 시 성공 메시지가 표시되는지 확인\n   - 성공 메시지: \"문의가 접수되었습니다!\" + \"빠른 시일 내에 연락드리겠습니다.\" 확인\n   - 실제 서버 전송이 발생하지 않는지 확인 (Network 탭에서 POST 요청 없음)\n\n5. **반응형 테스트:**\n   - 모바일(375px)에서 입력 필드가 적절한 크기로 표시되는지 테스트\n   - 터치 친화적인 높이(`h-12`, 48px)로 렌더링되는지 확인\n   - 태블릿/데스크톱에서 폼이 중앙 정렬(`max-w-lg mx-auto`)되는지 확인\n\n6. **접근성:**\n   - 에러 발생 시 `aria-invalid=\"true\"` 속성이 설정되는지 확인\n   - 에러 메시지가 `aria-describedby`로 연결되는지 확인\n   - 각 입력 필드에 적절한 `autoComplete` 속성이 있는지 확인",
+        "subtasks": [],
+        "complexity": 3,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-09-27T06:54:05.505Z"
+      },
+      {
+        "id": "6",
+        "title": "문의 폼 클라이언트 유효성 검사 구현",
+        "description": "이름, 전화번호, 이메일 입력에 대한 클라이언트 측 유효성 검사를 추가합니다",
+        "status": "done",
+        "dependencies": [
+          "5"
+        ],
+        "priority": "medium",
+        "details": "**구현 완료 상태 (`components/ContactForm.tsx`):**\n\n현재 ContactForm.tsx는 다음 기능이 완전히 구현되어 있습니다:\n\n**1. 상태 관리 (useState 훅):**\n- `formData`: { name, phone, email } 입력값 저장\n- `errors`: 각 필드의 에러 메시지 저장 (Partial<Record<keyof FormData, string>>)\n- `submitted`: 폼 제출 성공 여부 추적\n- `INITIAL_FORM_DATA` 상수로 초기값 관리\n\n**2. 유효성 검사 (validate 함수, 15~38행):**\n- `PHONE_REGEX = /^\\d{3}-\\d{4}-\\d{4}$/`: 010-1234-5678 형식 검증\n- `EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/`: 표준 이메일 형식 검증\n- 이름: 빈 값 체크\n- 에러 객체 반환 방식으로 검증 결과 관리\n\n**3. 에러 메시지 표시 (109~141행):**\n- `aria-describedby={error ? errorId : undefined}` 접근성 연결\n- `aria-invalid={Boolean(error)}` 접근성 상태\n- 에러 시 `border-red-400` 테두리 적용\n- 에러 메시지 `<p id={errorId}>` 조건부 렌더링\n\n**4. 실시간 에러 초기화 (handleChange, 75~81행):**\n- 입력 시 해당 필드의 에러 메시지 즉시 제거\n- 불변성 유지하며 상태 업데이트\n\n**5. 성공 화면 (94~105행):**\n- `submitted === true`일 때 폼 대신 성공 카드 렌더링\n- `rounded-2xl border border-zinc-200 bg-zinc-50` 스타일\n- '문의가 접수되었습니다!' + '빠른 시일 내에 연락드리겠습니다.' 메시지\n- **실제 서버 전송/이메일 발송 없음 (PRD 범위 밖)**\n\n**Playwright 검증 완료:**\n- 빈값 제출 시 3개 필드 에러 메시지 표시\n- 형식 오류 시 해당 필드 에러 메시지 표시\n- 올바른 입력 후 성공 카드 전환\n\n```tsx\n// components/ContactForm.tsx 핵심 구조\n'use client';\nimport { useState } from 'react';\n\nconst PHONE_REGEX = /^\\d{3}-\\d{4}-\\d{4}$/;\nconst EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction validate(data: FormData): FormErrors {\n  // 이름/전화번호/이메일 검증 로직\n}\n\nexport default function ContactForm() {\n  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);\n  const [errors, setErrors] = useState<FormErrors>({});\n  const [submitted, setSubmitted] = useState(false);\n  // handleChange, handleSubmit, render 로직\n}\n```",
+        "testStrategy": "**Playwright 스크린샷 검증 완료:**\n\n1. **빈값 제출 시나리오:**\n   - 폼을 빈 상태로 제출\n   - 3개 필드 모두 에러 메시지 표시 확인\n   - 입력 필드에 `border-red-400` 스타일 적용 확인\n\n2. **형식 오류 시나리오:**\n   - 전화번호: `01012345678` (하이픈 없음) → '올바른 전화번호 형식이 아닙니다' 에러\n   - 이메일: `test@` → '올바른 이메일 형식이 아닙니다' 에러\n   - 각 에러 메시지가 해당 필드 아래에 정확히 표시되는지 확인\n\n3. **성공 시나리오:**\n   - 이름: '홍길동', 전화번호: '010-1234-5678', 이메일: 'test@example.com'\n   - 제출 시 폼이 사라지고 성공 카드가 표시되는지 확인\n   - '문의가 접수되었습니다!' 메시지 확인\n\n4. **접근성 검증:**\n   - `aria-describedby` 속성이 에러 메시지 ID와 연결되는지 확인\n   - `aria-invalid` 속성이 에러 상태를 반영하는지 확인",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "폼 상태 관리 추가 (useState 훅 설정)",
+            "description": "useState를 사용하여 formData, errors, submitted 세 가지 상태를 관리합니다. formData는 이름/전화번호/이메일 입력값을 저장하고, errors는 각 필드의 에러 메시지를 저장하며, submitted는 폼 제출 성공 여부를 추적합니다.",
+            "dependencies": [],
+            "details": "**구현 완료 (`components/ContactForm.tsx:70-73`):**\n\n- `'use client'` 선언으로 클라이언트 컴포넌트 지정\n- `formData` 상태: `useState<FormData>(INITIAL_FORM_DATA)` - { name: '', phone: '', email: '' } 초기값\n- `errors` 상태: `useState<FormErrors>({})` - Partial<Record<keyof FormData, string>> 타입\n- `submitted` 상태: `useState(false)` - 폼 제출 성공 여부\n- `handleChange` 함수 (75-81행): 입력값 변경 시 formData 업데이트 및 해당 필드 에러 제거\n- FIELDS 상수로 필드 메타데이터 관리 (name, label, type, placeholder, autoComplete)",
+            "status": "pending",
+            "testStrategy": "React DevTools에서 상태 확인: 입력 시 formData 업데이트, 에러 발생 후 입력 시 해당 필드 에러 제거 검증 완료",
+            "parentId": "undefined"
+          },
+          {
+            "id": 2,
+            "title": "유효성 검사 함수 구현 (regex 기반 검증 로직)",
+            "description": "이름, 전화번호, 이메일 각 필드에 대한 정규식 기반 유효성 검사 로직을 validate 함수에 구현합니다. 이름은 빈 값 체크, 전화번호는 010-1234-5678 형식, 이메일은 표준 이메일 형식을 검증합니다.",
+            "dependencies": [
+              1
+            ],
+            "details": "**구현 완료 (`components/ContactForm.tsx:15-38`):**\n\n- `PHONE_REGEX = /^\\d{3}-\\d{4}-\\d{4}$/` (15행): 010-1234-5678 형식 검증\n- `EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/` (16행): 표준 이메일 형식 검증\n- `validate(data: FormData): FormErrors` 함수 (18-38행):\n  - 이름: `data.name.trim()` 빈 값 체크\n  - 전화번호: 빈 값 체크 + 정규식 형식 검증\n  - 이메일: 빈 값 체크 + 정규식 형식 검증\n- `handleSubmit` (83-92행): `validate(formData)` 호출 후 에러 없으면 `setSubmitted(true)`",
+            "status": "pending",
+            "testStrategy": "Playwright 검증 완료: 1) 빈값 제출 시 3개 에러, 2) 01012345678 입력 시 에러, 3) test@ 입력 시 에러, 4) 올바른 값 입력 시 validate가 빈 객체 반환",
+            "parentId": "undefined"
+          },
+          {
+            "id": 3,
+            "title": "에러 메시지 표시 및 성공 화면 UI 구현",
+            "description": "각 입력 필드 아래에 에러 메시지를 조건부 렌더링하고, 폼 제출 성공 시 성공 메시지 화면을 표시합니다. 에러가 있는 필드는 빨간색 테두리로 강조 표시합니다.",
+            "dependencies": [
+              2
+            ],
+            "details": "**구현 완료 (`components/ContactForm.tsx:94-151`):**\n\n**에러 UI (121-139행):**\n- `aria-invalid={Boolean(error)}` 접근성 속성\n- `aria-describedby={error ? errorId : undefined}` 에러 메시지 연결\n- 동적 className: `error ? 'border-red-400' : 'border-zinc-300'`\n- 에러 메시지: `{error && <p id={errorId} className=\"text-sm text-red-500\">{error}</p>}`\n- 필수 표시: `<span className=\"text-brand\">*</span>`\n\n**성공 화면 (94-105행):**\n- `submitted === true`일 때 폼 대신 성공 카드 렌더링\n- `rounded-2xl border border-zinc-200 bg-zinc-50` 스타일\n- '문의가 접수되었습니다!' + '빠른 시일 내에 연락드리겠습니다.' 메시지\n- 서버 전송 없음 (PRD 범위 밖)",
+            "status": "pending",
+            "testStrategy": "Playwright 스크린샷 검증 완료: 1) 에러 시 빨간 테두리 표시, 2) 에러 메시지 필드 아래 정확히 표시, 3) 올바른 입력 후 제출 시 성공 카드 전환, 4) 폼 사라지고 녹색 배경 메시지만 표시",
+            "parentId": "undefined"
+          }
+        ],
+        "complexity": 5,
+        "recommendedSubtasks": 3,
+        "expansionPrompt": "이 작업을 다음 하위 작업으로 나누세요: 1) 폼 상태 관리 추가 (useState로 formData, errors, submitted 관리), 2) 유효성 검사 함수 구현 (이름/전화번호/이메일 regex 검증), 3) 에러 메시지 표시 및 성공 화면 UI 구현",
+        "updatedAt": "2026-09-27T06:54:17.607Z"
+      },
+      {
+        "id": "7",
+        "title": "컨설팅 프로세스 페이지 구현",
+        "description": "컨설팅 진행 단계를 시각적으로 표시하는 프로세스 페이지를 구현합니다",
+        "status": "done",
+        "dependencies": [
+          "2"
+        ],
+        "priority": "medium",
+        "details": "**이미 구현된 내용 (`app/process/page.tsx`, 구현 완료):**\n\n현재 프로세스 페이지는 다음과 같이 완전히 구현되어 있습니다:\n\n**1. 데이터 구조 (PROCESS_STEPS 배열, 3~29행):**\n- 5단계 프로세스를 상수 배열로 정의\n- 각 단계: { number, title, description }\n- 1단계: 상담 신청\n- 2단계: 요구사항 진단\n- 3단계: 컨설팅 방향 제안\n- 4단계: 실행 및 코칭\n- 5단계: 결과 리뷰\n\n**2. 레이아웃 구조 (33~41행):**\n- 최대 너비 `max-w-2xl` + 중앙 정렬 컨테이너\n- 상단 헤더: 제목 \"컨설팅 프로세스\" + 부제 \"체계적인 5단계 프로세스로 최적의 결과를 만들어갑니다.\"\n- 반응형 패딩: `py-16 sm:py-24`\n- 텍스트 크기: `text-2xl sm:text-3xl` (제목), `text-sm sm:text-base` (부제)\n\n**3. 세로 타임라인 시각화 (43~64행):**\n- `<ol>` 시맨틱 태그 사용 (순서 있는 목록)\n- 각 단계마다 `<li>` 요소로 렌더링 (`gap-4 sm:gap-6`로 간격 조정)\n- **원형 번호 아이콘** (47~49행):\n  - `rounded-full bg-brand` (파란색 원형 배경)\n  - 크기: `h-10 w-10 sm:h-12 sm:w-12` (모바일 40px, 데스크톱 48px)\n  - 번호 텍스트: 흰색 (`text-white`), 가운데 정렬\n- **세로 연결선** (50~52행):\n  - 조건부 렌더링: `index < PROCESS_STEPS.length - 1` (마지막 단계 제외)\n  - 스타일: `w-px flex-1 bg-zinc-200` (1px 너비 회색 세로선)\n  - `aria-hidden=\"true\"` 접근성 속성 포함\n- **단계 설명** (54~61행):\n  - 제목: `font-semibold text-zinc-900`, 크기 `text-base sm:text-lg`\n  - 설명: `text-zinc-600`, 크기 `text-sm sm:text-base`\n  - 하단 여백 `pb-10`으로 단계 간 간격 확보\n\n**4. 하단 CTA 버튼 (66~73행):**\n- Next.js Link 컴포넌트로 `/contact` 페이지 이동\n- 스타일: `rounded-full bg-brand` (둥근 파란색 버튼)\n- 반응형 패딩: `px-6 py-3 sm:px-8 sm:py-3.5`\n- 호버 효과: `hover:opacity-90`\n- 텍스트: \"컨설팅 문의하기\"\n\n**5. 반응형 디자인 구현:**\n- 모바일/데스크톱 텍스트 크기 자동 조정 (sm: 브레이크포인트)\n- 아이콘 크기 조정 (40px → 48px)\n- 간격 조정 (gap-4 → gap-6)\n- 패딩 조정 (py-16 → py-24)\n\n**구현 품질:**\n- Tailwind CSS v4 디자인 시스템 활용 (`bg-brand`, `text-zinc-*`)\n- 시맨틱 HTML (`<ol>`, `<li>`) 사용으로 접근성 확보\n- `aria-hidden` 속성으로 스크린 리더 최적화\n- 조건부 렌더링으로 마지막 단계 연결선 제외 처리\n- 일관된 디자인 언어 (무채색 + 포인트 컬러)\n\n**디자인 원칙 준수:**\n- 무채색 기반 (zinc-900, zinc-600, zinc-200)\n- 포인트 컬러 1개 (brand = #3b82f6)\n- 넉넉한 여백 (pb-10, py-16/24)\n- 최소한의 장식 (그림자 없음, 애니메이션 없음)\n- Pretendard/Inter 폰트 (layout.tsx에서 전역 설정)",
+        "testStrategy": "**브라우저 테스트 (수동):**\n\n1. **페이지 렌더링 확인:**\n   - `/process` 접속 시 5개 단계가 순서대로 표시되는지 확인\n   - 각 단계의 번호, 제목, 설명이 정확히 렌더링되는지 검증\n   - 타임라인 연결선이 1~4번 단계에만 표시되고 5번에는 없는지 확인\n\n2. **CTA 버튼 동작:**\n   - \"컨설팅 문의하기\" 버튼 클릭 시 `/contact`로 이동하는지 테스트\n   - 버튼 호버 시 `opacity-90` 효과 적용되는지 확인\n\n3. **반응형 레이아웃:**\n   - Chrome DevTools Responsive Mode에서 375px(모바일) / 768px(태블릿) / 1280px(데스크톱) 테스트\n   - 텍스트 크기가 `sm:` 브레이크포인트에서 자동 조정되는지 확인:\n     - 제목: 2xl → 3xl\n     - 부제: sm → base\n     - 단계 제목: base → lg\n     - 단계 설명: sm → base\n   - 아이콘 크기가 40px → 48px로 확대되는지 확인\n   - 간격이 `gap-4` → `gap-6`으로 확대되는지 확인\n   - 가로 스크롤이 발생하지 않는지 확인\n\n4. **접근성:**\n   - 브라우저 검사 도구로 `<ol>`, `<li>` 시맨틱 태그 확인\n   - 연결선에 `aria-hidden=\"true\"` 속성 포함 여부 확인\n\n5. **디자인 시스템 일관성:**\n   - brand 색상(#3b82f6)이 아이콘 배경과 버튼에 적용되는지 확인\n   - 텍스트 색상이 zinc-900, zinc-600 사용되는지 확인\n   - Pretendard/Inter 폰트가 적용되는지 Network 탭에서 확인\n\n**자동화 테스트 (선택):**\n- Playwright로 `/process` 접속 → 5개 `<li>` 요소 확인\n- 마지막 `<li>` 내부에 연결선(`w-px`) 없는지 검증\n- `/contact` 링크 존재 여부 확인",
+        "subtasks": [],
+        "complexity": 3,
+        "recommendedSubtasks": 0,
+        "expansionPrompt": "",
+        "updatedAt": "2026-09-27T06:55:12.125Z"
+      },
+      {
+        "id": "8",
+        "title": "반응형 디자인 최적화 (모바일/태블릿/데스크톱)",
+        "description": "모든 페이지가 다양한 화면 크기에서 적절히 표시되도록 반응형 스타일을 조정하고, Playwright 자동화 테스트로 검증합니다",
+        "status": "done",
+        "dependencies": [
+          "4",
+          "6",
+          "7"
+        ],
+        "priority": "medium",
+        "details": "**반응형 브레이크포인트 (Tailwind v4 기본):**\n- sm: 640px\n- md: 768px\n- lg: 1024px\n- xl: 1280px\n\n**적용 대상 (이미 구현된 내용 확인됨):**\n\n1. **Header.tsx (components/Header.tsx)**: 햄버거 메뉴 이미 구현 완료\n- 데스크톱: `hidden md:flex` (26행)\n- 모바일: 햄버거 버튼 (`md:hidden`, 38~47행) + 드롭다운 메뉴 (50~66행)\n- 버튼 크기: `h-10 w-10` (41행, 최소 터치 타겟 만족)\n\n2. **ImageSlider.tsx (components/ImageSlider.tsx)**: 반응형 높이 이미 적용됨\n- 현재 높이: `h-[240px] sm:h-[360px] md:h-[480px]` (31행)\n- 화살표 버튼: `h-11 w-11` (50, 58행, 44px 터치 타겟 만족)\n- 인디케이터 dot: `h-3 w-3` (71행)\n\n3. **메인 페이지 (app/page.tsx)**: 반응형 텍스트 크기 이미 적용됨\n- 제목: `text-2xl sm:text-3xl` (10행)\n- 부제목: `text-lg sm:text-xl` (13행)\n- 본문: `text-sm sm:text-base` (16행)\n- 패딩: `px-6 py-16 sm:py-24` (9행)\n- CTA 버튼: `px-6 py-3 sm:px-8 sm:py-3.5 sm:text-base` (24행)\n\n4. **ContactForm (components/ContactForm.tsx)**: 반응형 입력 필드 이미 적용됨\n- 입력 필드: `h-12` (131행, 48px 높이로 터치 타겟 만족)\n- 버튼: `h-12` (146행, 48px 높이로 터치 타겟 만족)\n- 폼 레이아웃: `flex flex-col` (108행)\n\n5. **ProcessPage (app/process/page.tsx)**: 반응형 타임라인 이미 적용됨\n- 패딩: `py-16 sm:py-24` (구현 확인 필요)\n- 텍스트 크기: `text-2xl sm:text-3xl` (구현 확인 필요)\n\n**테스트 전략 (Playwright 자동화):**\n\n```typescript\nimport { test, expect } from '@playwright/test';\n\nconst VIEWPORTS = [\n  { name: 'Mobile', width: 375, height: 667 },\n  { name: 'Tablet', width: 768, height: 1024 },\n  { name: 'Desktop', width: 1280, height: 800 },\n];\n\nconst PAGES = ['/', '/process', '/contact'];\n\nfor (const viewport of VIEWPORTS) {\n  test.describe(`Responsive: ${viewport.name} (${viewport.width}px)`, () => {\n    test.use({ viewport });\n\n    for (const path of PAGES) {\n      test(`${path} - 가로 스크롤 없음`, async ({ page }) => {\n        await page.goto(`http://localhost:3000${path}`);\n        const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);\n        const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);\n        expect(scrollWidth).toBe(clientWidth);\n      });\n\n      test(`${path} - 콘솔 에러 없음`, async ({ page }) => {\n        const errors: string[] = [];\n        page.on('console', msg => {\n          if (msg.type() === 'error') errors.push(msg.text());\n        });\n        await page.goto(`http://localhost:3000${path}`);\n        expect(errors).toHaveLength(0);\n      });\n    }\n\n    test('Header - 모바일 햄버거 메뉴 동작', async ({ page }) => {\n      if (viewport.width >= 768) return; // 태블릿 이상은 스킵\n      await page.goto('http://localhost:3000');\n      const menuButton = page.locator('button[aria-controls=\"mobile-nav\"]');\n      await expect(menuButton).toBeVisible();\n      await menuButton.click();\n      await expect(page.locator('#mobile-nav')).toBeVisible();\n      await menuButton.click();\n      await expect(page.locator('#mobile-nav')).not.toBeVisible();\n    });\n\n    test('ImageSlider - 높이 검증', async ({ page }) => {\n      await page.goto('http://localhost:3000');\n      const slider = page.locator('.relative.w-full').first();\n      const height = await slider.evaluate(el => el.clientHeight);\n      if (viewport.width < 640) {\n        expect(height).toBe(240); // h-[240px]\n      } else if (viewport.width < 768) {\n        expect(height).toBe(360); // sm:h-[360px]\n      } else {\n        expect(height).toBe(480); // md:h-[480px]\n      }\n    });\n\n    test('ContactForm - 버튼 최소 높이 44px', async ({ page }) => {\n      await page.goto('http://localhost:3000/contact');\n      const submitButton = page.locator('button[type=\"submit\"]');\n      const height = await submitButton.evaluate(el => el.clientHeight);\n      expect(height).toBeGreaterThanOrEqual(44);\n    });\n  });\n}\n```",
+        "testStrategy": "**Playwright 자동화 테스트 (필수):**\n\n1. **가로 스크롤 검증:** 모든 페이지(/, /process, /contact)에서 `document.documentElement.scrollWidth === clientWidth` 확인 (375px, 768px, 1280px)\n2. **콘솔 에러 0건:** `page.on('console')` 리스너로 모든 에러 캡처 및 검증\n3. **Header 햄버거 메뉴 동작:** 모바일(< 768px)에서 버튼 클릭 시 메뉴 열기/닫기 동작 확인\n4. **ImageSlider 높이 검증:** 240px(모바일) / 360px(sm) / 480px(md) 실측\n5. **버튼 터치 타겟:** 모든 버튼 높이 ≥ 44px 검증\n\n**수동 검증 (보조):**\n- Chrome DevTools Responsive Mode로 375px, 768px, 1280px 육안 확인\n- 실제 모바일 기기(iPhone/Android)에서 테스트 (선택적)\n\n**성공 기준:**\n- Playwright 테스트 전체 통과 (PASS)\n- 가로 스크롤 0건\n- 콘솔 에러 0건\n- 모든 인터랙티브 요소 터치 타겟 ≥ 44px",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Playwright 테스트 환경 설정 및 기본 테스트 스크립트 작성",
+            "description": "Playwright를 설치하고, 3개 브레이크포인트(375px, 768px, 1280px)에서 반응형 검증을 위한 기본 테스트 스크립트를 작성합니다.",
+            "dependencies": [],
+            "details": "1. Playwright 설치: `npm install -D @playwright/test`\n2. playwright.config.ts 생성: 3개 viewport 프로젝트 정의 (mobile-375, tablet-768, desktop-1280)\n3. tests/responsive.spec.ts 생성:\n   - 가로 스크롤 검증 테스트 (scrollWidth === clientWidth)\n   - 콘솔 에러 캡처 테스트 (page.on('console') 리스너)\n   - 모든 페이지(/, /process, /contact) 대상 반복 테스트\n4. package.json에 스크립트 추가: `\"test:e2e\": \"playwright test\"`\n5. GitHub Actions CI에 Playwright 테스트 추가 (선택적)",
+            "status": "done",
+            "testStrategy": "`npx playwright test --reporter=list` 실행 시 3개 viewport × 3개 페이지 = 9개 테스트가 PASS 상태인지 확인합니다. `npx playwright show-report`로 HTML 리포트를 확인하고, 모든 테스트가 초록색(통과)인지 검증합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:07:13.972Z"
+          },
+          {
+            "id": 2,
+            "title": "Header 햄버거 메뉴 동작 자동화 테스트 (모바일 전용)",
+            "description": "모바일 viewport(< 768px)에서 Header 햄버거 메뉴 버튼 클릭 시 메뉴가 열리고 닫히는 동작을 Playwright로 자동 검증합니다.",
+            "dependencies": [
+              1
+            ],
+            "details": "tests/responsive.spec.ts에 테스트 추가:\n1. 모바일 viewport(375px)에서만 실행 (tablet/desktop은 스킵)\n2. 햄버거 버튼 선택자: `button[aria-controls=\"mobile-nav\"]` (components/Header.tsx:43)\n3. 메뉴 선택자: `#mobile-nav` (components/Header.tsx:52)\n4. 테스트 시나리오:\n   a. 초기 상태: 햄버거 버튼 표시, 메뉴 숨김\n   b. 버튼 클릭 → 메뉴 표시 (`toBeVisible()`)\n   c. 버튼 재클릭 → 메뉴 숨김 (`not.toBeVisible()`)\n5. 아이콘 전환 검증 (선택적): `☰` ↔ `✕`",
+            "status": "done",
+            "testStrategy": "`npx playwright test --grep \"Header.*햄버거\" --project=mobile-375` 실행 시 테스트가 PASS인지 확인합니다. Playwright Inspector(`--debug` 플래그)로 메뉴 열기/닫기 동작을 육안으로 검증합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:07:24.488Z"
+          },
+          {
+            "id": 3,
+            "title": "ImageSlider 높이 반응형 검증 (240px/360px/480px)",
+            "description": "ImageSlider 컴포넌트의 높이가 viewport에 따라 정확히 240px(모바일) / 360px(sm) / 480px(md)로 표시되는지 실측 검증합니다.",
+            "dependencies": [
+              1
+            ],
+            "details": "tests/responsive.spec.ts에 테스트 추가:\n1. 슬라이더 선택자: `.relative.w-full` 또는 `[class*=\"h-[240px]\"]` (ImageSlider.tsx:31)\n2. 각 viewport에서 clientHeight 실측:\n   - 375px → 240px 기대\n   - 768px → 360px 기대 (sm 브레이크포인트)\n   - 1280px → 480px 기대 (md 브레이크포인트)\n3. 허용 오차: ±2px (브라우저 렌더링 오차 고려)\n4. 화살표 버튼 크기 검증 (부가): `h-11 w-11` (44px × 44px) 확인",
+            "status": "done",
+            "testStrategy": "`npx playwright test --grep \"ImageSlider.*높이\"` 실행 시 3개 viewport 테스트 모두 PASS인지 확인합니다. 실측 높이가 기대 높이 ±2px 범위 내에 있는지 검증합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:07:35.591Z"
+          },
+          {
+            "id": 4,
+            "title": "ContactForm 버튼 및 입력 필드 터치 타겟 검증 (최소 44px)",
+            "description": "ContactForm의 모든 입력 필드와 제출 버튼이 최소 터치 타겟 크기(44px × 44px)를 만족하는지 자동 검증합니다.",
+            "dependencies": [
+              1
+            ],
+            "details": "tests/responsive.spec.ts에 테스트 추가:\n1. 입력 필드 선택자: `input[type=\"text\"], input[type=\"tel\"], input[type=\"email\"]` (ContactForm.tsx:121~134)\n2. 제출 버튼 선택자: `button[type=\"submit\"]` (ContactForm.tsx:144~149)\n3. 각 요소의 clientHeight 실측:\n   - 입력 필드: h-12 → 48px 기대 (ContactForm.tsx:131)\n   - 제출 버튼: h-12 → 48px 기대 (ContactForm.tsx:146)\n4. 검증 조건: height ≥ 44px (WCAG 2.1 터치 타겟 가이드라인)\n5. 3개 viewport(375px, 768px, 1280px) 모두에서 테스트",
+            "status": "done",
+            "testStrategy": "`npx playwright test --grep \"ContactForm.*터치\"` 실행 시 모든 입력 필드와 버튼이 44px 이상인지 확인합니다. 테스트 실패 시 해당 요소의 실제 높이를 에러 메시지에서 확인합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:07:45.967Z"
+          },
+          {
+            "id": 5,
+            "title": "전체 페이지 가로 스크롤 및 콘솔 에러 종합 검증",
+            "description": "모든 페이지(/, /process, /contact)에서 3개 viewport별로 가로 스크롤이 없고, 콘솔 에러가 0건인지 최종 검증합니다.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "tests/responsive.spec.ts에 종합 테스트 추가:\n1. **가로 스크롤 검증:**\n   - 각 페이지에서 `document.documentElement.scrollWidth === document.documentElement.clientWidth` 확인\n   - 실패 시 초과 너비 요소를 Chrome DevTools로 수동 디버깅 (Playwright Inspector 활용)\n2. **콘솔 에러 검증:**\n   - `page.on('console')` 리스너로 모든 에러 메시지 캡처\n   - 에러 개수 === 0 검증\n   - 실패 시 에러 메시지를 테스트 리포트에 출력\n3. **회귀 테스트 보장:**\n   - 모든 subtask(1~4)가 완료된 후 최종 실행\n   - Playwright CI 통합 (GitHub Actions 또는 로컬 pre-commit hook)\n4. **테스트 리포트 생성:**\n   - `npx playwright show-report`로 HTML 리포트 확인\n   - 스크린샷 캡처 (실패 시 자동 저장)",
+            "status": "done",
+            "testStrategy": "`npx playwright test --reporter=html` 실행 후 `npx playwright show-report` 명령어로 HTML 리포트를 엽니다. 모든 테스트(가로 스크롤, 콘솔 에러, 햄버거 메뉴, 높이, 터치 타겟)가 초록색(PASS)인지 최종 확인합니다. 실패 케이스가 있다면 스크린샷과 에러 메시지를 확인하여 수정합니다.",
+            "parentId": "undefined",
+            "updatedAt": "2026-09-27T07:07:56.228Z"
+          }
+        ],
+        "complexity": 6,
+        "recommendedSubtasks": 5,
+        "expansionPrompt": "이 작업을 다음 하위 작업으로 나누세요: 1) Header 모바일 반응형 조정 (세로 스택 또는 햄버거 메뉴), 2) ImageSlider 모바일 높이 및 버튼 크기 조정, 3) 메인 페이지 텍스트 크기 및 패딩 반응형 조정, 4) ContactForm 모바일 최적화 (입력 필드 크기, 터치 타겟), 5) 전체 페이지 반응형 테스트 (375px/768px/1280px) 및 가로 스크롤 제거",
+        "updatedAt": "2026-09-27T07:07:56.228Z"
+      }
+    ],
+    "metadata": {
+      "version": "1.0.0",
+      "lastModified": "2026-09-27T07:08:26.556Z",
+      "taskCount": 8,
+      "completedCount": 8,
+      "tags": [
+        "master"
+      ]
+    }
+  }
+}

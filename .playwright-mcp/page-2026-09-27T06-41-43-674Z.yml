@@ -1,0 +1,29 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - generic [ref=f4e3]:
+      - link "VC 바이브 코딩 컨설팅" [ref=f4e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f4e5]: VC
+        - generic [ref=f4e6]: 바이브 코딩 컨설팅
+      - button "메뉴 열기" [ref=f4e54]
+  - main [ref=f4e11]:
+    - generic [ref=f4e55]:
+      - generic [ref=f4e56]: Coming soon
+      - heading "컨설팅 프로세스 페이지 준비 중입니다" [level=1] [ref=f4e57]
+      - paragraph [ref=f4e58]: 컨설팅이 진행되는 단계를 한눈에 볼 수 있는 타임라인이 곧 이곳에 채워집니다.
+      - link "홈으로 돌아가기" [ref=f4e59] [cursor=pointer]:
+        - /url: /
+  - contentinfo [ref=f4e25]:
+    - generic [ref=f4e26]:
+      - generic [ref=f4e27]:
+        - generic [ref=f4e28]: VC
+        - paragraph [ref=f4e29]: © 2026 바이브 코딩 컨설팅. All rights reserved.
+      - navigation "푸터 메뉴" [ref=f4e30]:
+        - link "홈" [ref=f4e31] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f4e32] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f4e33] [cursor=pointer]:
+          - /url: /contact
+  - button "Open Next.js Dev Tools" [ref=f4e39] [cursor=pointer]
+  - alert [ref=f4e43]: 컨설팅 프로세스 페이지 준비 중입니다

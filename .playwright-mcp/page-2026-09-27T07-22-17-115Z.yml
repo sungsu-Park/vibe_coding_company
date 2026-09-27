@@ -1,0 +1,58 @@
+- generic [ref=f10e1]:
+  - banner [ref=f10e2]:
+    - generic [ref=f10e3]:
+      - link "VC 바이브 코딩 컨설팅" [ref=f10e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f10e5]: VC
+        - generic [ref=f10e6]: 바이브 코딩 컨설팅
+      - navigation "주요 메뉴" [ref=f10e7]:
+        - link "홈" [ref=f10e8] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f10e9] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f10e10] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=f10e11]:
+    - generic [ref=f10e12]:
+      - generic [ref=f10e13]:
+        - generic [ref=f10e14]:
+          - img "모니터에 표시된 코드 화면" [ref=f10e15]
+          - paragraph [ref=f10e17]: 코드로 아이디어를 실현합니다
+        - paragraph [ref=f10e21]: 요구사항을 함께 진단합니다
+        - paragraph [ref=f10e25]: 함께 성장하는 컨설팅 파트너
+        - button "이전 슬라이드" [ref=f10e26]
+        - button "다음 슬라이드" [active] [ref=f10e29]
+        - generic [ref=f10e32]:
+          - button "1번 슬라이드로 이동" [ref=f10e33]
+          - button "2번 슬라이드로 이동" [ref=f10e35]
+          - button "3번 슬라이드로 이동" [ref=f10e37]
+      - generic [ref=f10e39]:
+        - heading "바이브 코딩 컨설팅" [level=1] [ref=f10e40]
+        - paragraph [ref=f10e41]: 코드에 생명을 불어넣는 컨설팅 파트너
+        - paragraph [ref=f10e42]: 바이브 코딩은 단순히 코드를 작성하는 것을 넘어, 비즈니스의 본질을 이해하고 기술적 가치를 창출하는 컨설팅 서비스입니다. 귀사의 성장과 혁신을 위한 최적의 솔루션을 함께 만들어갑니다.
+        - link "컨설팅 문의하기" [ref=f10e43] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=f10e45]:
+        - generic [ref=f10e46]:
+          - heading "빠른 프로토타이핑" [level=2] [ref=f10e47]
+          - paragraph [ref=f10e48]: 아이디어를 며칠 안에 실제로 동작하는 제품으로 만들어 드립니다.
+        - generic [ref=f10e49]:
+          - heading "실전 코칭" [level=2] [ref=f10e50]
+          - paragraph [ref=f10e51]: 팀의 개발자와 함께 문제를 진단하고, 현장에서 바로 쓰는 방법을 전달합니다.
+        - generic [ref=f10e52]:
+          - heading "지속 가능한 코드베이스" [level=2] [ref=f10e53]
+          - paragraph [ref=f10e54]: 컨설팅이 끝난 뒤에도 팀이 스스로 유지보수할 수 있는 구조로 설계합니다.
+  - contentinfo [ref=f10e55]:
+    - generic [ref=f10e56]:
+      - generic [ref=f10e57]:
+        - generic [ref=f10e58]: VC
+        - paragraph [ref=f10e59]: © 2026 바이브 코딩 컨설팅. All rights reserved.
+      - navigation "푸터 메뉴" [ref=f10e60]:
+        - link "홈" [ref=f10e61] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f10e62] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f10e63] [cursor=pointer]:
+          - /url: /contact
+  - button "Open Next.js Dev Tools" [ref=f10e69] [cursor=pointer]
+  - alert [ref=f10e73]

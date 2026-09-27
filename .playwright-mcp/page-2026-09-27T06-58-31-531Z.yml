@@ -1,0 +1,48 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - link "VC 바이브 코딩 컨설팅" [ref=f2e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f2e5]: VC
+        - generic [ref=f2e6]: 바이브 코딩 컨설팅
+      - navigation "주요 메뉴" [ref=f2e7]:
+        - link "홈" [ref=f2e8] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f2e9] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f2e10] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=f2e11]:
+    - generic [ref=f2e12]:
+      - generic [ref=f2e13]:
+        - heading "컨설팅 문의" [level=1] [ref=f2e14]
+        - paragraph [ref=f2e15]: 아래 정보를 입력하시면 빠른 시일 내에 연락드리겠습니다.
+      - generic [ref=f2e16]:
+        - generic [ref=f2e17]:
+          - generic [ref=f2e18]: 이름 *
+          - textbox "이름 *" [ref=f2e19]:
+            - /placeholder: 홍길동
+        - generic [ref=f2e20]:
+          - generic [ref=f2e21]: 전화번호 *
+          - textbox "전화번호 *" [ref=f2e22]:
+            - /placeholder: 010-1234-5678
+        - generic [ref=f2e23]:
+          - generic [ref=f2e24]: 이메일 *
+          - textbox "이메일 *" [ref=f2e25]:
+            - /placeholder: example@email.com
+        - button "문의하기" [ref=f2e26]
+      - link "← 메인 페이지로 돌아가기" [ref=f2e27] [cursor=pointer]:
+        - /url: /
+  - contentinfo [ref=f2e28]:
+    - generic [ref=f2e29]:
+      - generic [ref=f2e30]:
+        - generic [ref=f2e31]: VC
+        - paragraph [ref=f2e32]: © 2026 바이브 코딩 컨설팅. All rights reserved.
+      - navigation "푸터 메뉴" [ref=f2e33]:
+        - link "홈" [ref=f2e34] [cursor=pointer]:
+          - /url: /
+        - link "컨설팅 프로세스" [ref=f2e35] [cursor=pointer]:
+          - /url: /process
+        - link "문의하기" [ref=f2e36] [cursor=pointer]:
+          - /url: /contact
+  - button "Open Next.js Dev Tools" [ref=f2e42] [cursor=pointer]
